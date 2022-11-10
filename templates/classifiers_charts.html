@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-4">
+        <div class="card mb-4">
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Area Ratio</h5>
+                </div>
+                <div class="chart-area">
+                    <canvas id="ROC_Curve_Chart_{{ classifier }}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card mb-4">
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Accuracy Score</h5>
+                </div>
+                <div class="chart-pie">
+                    <canvas id="Accuracy_Score_Chart_{{ classifier }}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card mb-4">
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Error Rate</h5>
+                </div>
+                <div class="chart-pie">
+                    <canvas id="Error_Rate_Chart_{{ classifier }}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,546 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Default Card Payment Prediction
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- favicon -->
+        <link rel="shortcut icon" href="{% static 'logo/logo2.png' %}">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- Icons -->
+        <link href="{% static 'css/materialdesignicons.min.css' %}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+        <!-- Main Css -->
+        <link href="{% static 'css/style_predict.css' %}" rel="stylesheet" type="text/css" id="theme-opt" />
+        <link href="{% static 'css/default.css' %}" rel="stylesheet" id="color-opt">
+    </head>
+    <style>
+        .note i,.note svg {
+          transition: all 100ms ease-in-out;
+        }
+        .note::before,
+        .note::after {
+            --scale: 0;
+            --arrow-size: 10px;
+            --tooltip-color: #f0f8ff;
+            position: absolute;
+            top: 35px;
+            left: 60%;
+            {#transform: translateX(-5%) translateY(var(--translate-y, 0)) scale(var(--scale));#}
+            transform: translateX(-5%) scale(var(--scale));
+            transition: 75ms transform;
+            transform-origin: bottom center;
+        }
+        .note::before {
+            z-index: 10;
+            box-shadow: 0 0 5px rgba(60, 72, 88, 0.25) !important;
+            font-family: "Proxima Nova regular",sans-serif;
+            font-size: 12px;
+            --translate-y: calc(-100% - var(--arrow-size));
+            content: attr(data-tooltip);
+            color: #646464;
+            border-radius: .3rem;
+            text-align: left;
+            width: max-content;
+            max-width: 202px;
+            background: #f0f8ff;
+            transform-origin: left center;
+            padding: 0 0.7rem;
+            height: 140px;
+            line-height: 2;
+        }
+        .note:hover::before,
+        .note:hover::after {
+          --scale: 1;
+        }
+        .note::after {
+            transform: translateX(3%) translateY(0px) scale(var(--scale)) rotate(180deg) !important;
+            --translate-y: calc(-1.1 * var(--arrow-size));
+            content: '';
+            border: var(--arrow-size) solid transparent;
+            border-top-color: #F0F8FF;
+            transform-origin: top center;
+        }
+    </style>
+    <style>
+        .wrapper {
+          width: 100vw;
+          height: 100vh;
+          z-index: 2;
+          position: fixed;
+        }
+        .dropdown-select {
+            padding: 0.7rem 1.75rem;
+            border-radius: 4px;
+            background-color: white;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+        .dropdown-select .select-icon {
+          right: 15px;
+          position: absolute;
+          transition: all 0.4s ease-in-out;
+        }
+        .dropdown-list {
+            z-index: 5;
+            height: 0;
+            border-radius: 8px;
+            background-color: white;
+            position: absolute;
+            border: 1px solid #dee2e6;
+            top: 105%;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: rgba(60, 72, 88, 0.4) 1px 2px 4px !important;
+            transition: opacity 0.2s ease-in-out,
+                      visibility 0.2s ease-in-out,
+                      height  0.3s ease-in-out,
+                      z-index  0.4s ease-in-out;
+        }
+        .dropwn-list__item {
+            border-radius: 8px;
+            vertical-align: middle;
+            padding: .75rem 1.75rem .75rem 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            font-size: 13px;
+            box-shadow: none;
+            background-color: #ffffff;
+            color: #3c4858;
+            height: 42px;
+            cursor: pointer;
+            font-family: "Nunito", sans-serif;
+            transition: all 0.25s ease-in-out;
+        }
+        .dropwn-list__item:hover {
+            background-color: aliceblue;
+            box-shadow: 2px 0 3px rgba(60, 72, 88, 0.15) !important;
+        }
+    </style>
+<body>
+
+    <div class="back-to-home rounded d-none d-sm-block">
+        <a href="{% url 'home' %}" class="btn btn-icon btn-soft-primary">
+            <i class="uil uil-home feather fea icon-sm icons"></i></a>
+    </div>
+
+    <div class="wrapper d-none"></div>
+
+    <section class="bg-home bg-circle-gradiant d-flex align-items-center">
+        <div class="bg-overlay bg-overlay-white"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 col-md-9">
+                    <div class="card login_page shadow rounded border-0">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Default Card Payment Prediction</h4>
+                            <form class="login-form mt-2" method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <fieldset class="form-group mb-0">
+                                    <div class="row">
+                                        {# Amount of credit granted #}
+                                        <div class="col-md-4">
+                                            <div class="form-group position-relative mb-2">
+                                                <label>Amount of credit granted<span class="text-danger">*</span></label>
+                                                <i class="uil uil-usd-circle feather fea icon-sm icons" style="top: 40px; left: 18px;"></i>
+                                                <div class="">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-5" id="X1" placeholder="Amount of credit granted" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# SEX #}
+                                        <div class="col-md-4">
+                                            <div class="dropdown form-group position-relative">
+                                                <label>Sex<span class="text-danger">*</span></label>
+                                                <div class="dropdown-select form-control pl-5" id="X2">
+                                                <i class="uil uil-nerd feather fea icon-sm icons" style="top: 44px; left: 18px;"></i>
+                                                    <span class="select" data-value="none">Sex</span>
+                                                    <i class="mdi mdi-24px mdi-chevron-up select-icon" style="top: 35px;"></i>
+                                                </div>
+                                                <div class="dropdown-list" style="height: 86px;">
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-smile feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="1">Male</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative">
+                                                        <i class="uil uil-grin feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="2">Female</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# Age #}
+                                        <div class="col-md-4">
+                                            <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                <label class="">Age<span class="text-danger">*</span></label>
+                                                <i class="uil uil-play feather fea icon-sm icons" style="top: 40px; left: 18px;"></i>
+                                                <div class="">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-5" id="X5" placeholder="Age" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# Education #}
+                                        <div class="col-md-6">
+                                            <div class="dropdown form-group position-relative">
+                                                <label>Education<span class="text-danger">*</span></label>
+                                                <div class="dropdown-select form-control pl-5" id="X3">
+                                                <i class="uil uil-graduation-cap feather fea icon-sm icons" style="top: 44px; left: 18px;"></i>
+                                                    <span class="select" data-value="none">Education</span>
+                                                    <i class="mdi mdi-24px mdi-chevron-up select-icon" style="top: 35px;"></i>
+                                                </div>
+                                                <div class="dropdown-list" style="height: 172px;">
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-book-alt feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="1">Higher Education</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-book-reader feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="2">College</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-briefcase feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="3">High School</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative">
+                                                        <i class="uil uil-plus-circle feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="4">Other</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# Civil status #}
+                                        <div class="col-md-6">
+                                            <div class="dropdown form-group position-relative">
+                                                <label>Civil status<span class="text-danger">*</span></label>
+                                                <div class="dropdown-select form-control pl-5" id="X4">
+                                                    <i class="uil uil-moon-eclipse feather fea icon-sm icons" style="top: 44px; left: 18px;"></i>
+                                                    <span class="select" data-value="none">Civil status</span>
+                                                    <i class="mdi mdi-24px mdi-chevron-up select-icon" style="top: 35px;"></i>
+                                                </div>
+                                                <div class="dropdown-list" style="height: 129px;">
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-heart feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="1">Married</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative" style="border-bottom : 0.5px solid #dee2e6;">
+                                                        <i class="uil uil-anchor feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="2">Single</span>
+                                                    </div>
+                                                    <div class="dropwn-list__item pl-5 position-relative">
+                                                        <i class="uil uil-plus-circle feather fea icon-sm icons dropdown-select-icon" style="top: 12px; left: 18px;"></i>
+                                                        <span data-value="3">Other</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# History of past payments #}
+                                        <div class="col-md-12">
+                                            <label>History of past payments (Reimbursement status for the last 6 Months)<span class="text-danger">*</span></label>
+                                            <span id="option_note" class="note w-50"
+                                                 data-tooltip="-1 = payer en bonne et due forme 1 = retard de paiement d'un mois ; 2 = retard de paiement de deux mois ; ... ; 8 = paiement retard de huit mois 9 = délai de paiement pour neuf mois et plus.">
+                                                <i class="mdi mdi-18px mdi-shield-alert-outline icon-sm"></i>
+                                            </span>
+                                        </div>
+                                        <div class="row px-3">
+                                            <div class="col-md-2 pr-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X6" placeholder="Sept" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X7" placeholder="August" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X8" placeholder="July" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X9" placeholder="June" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X10" placeholder="Mai" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 pl-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X11" placeholder="April" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# Bill Amount ($) #}
+                                        <div class="col-md-12 mt-3">
+                                            <label>Bill Amount ($)<span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="row px-3">
+                                            <div class="col-md-2 pr-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X12" placeholder="Sept" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X13" placeholder="August" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X14" placeholder="July" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X15" placeholder="June" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X16" placeholder="Mai" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 pl-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X17" placeholder="April" disabled style="background-color: #eaeaea;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {# Pay Amount ($) #}
+                                        <div class="col-md-12 mt-3">
+                                            <label>Pay Amount ($)<span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="row px-3">
+                                            <div class="col-md-2 pr-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X18" placeholder="Sept" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X19" placeholder="August" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X20" placeholder="July" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X21" placeholder="June" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 px-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X22" placeholder="Mai" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 pl-2">
+                                                <div id="div_id_objet" class="form-group position-relative mb-2">
+                                                    <input type="number" name="objet" autofocus="" maxlength="150" class="textinput textInput form-control pl-3" id="X23" placeholder="April" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mt-3">
+                                            <a class="btn btn-outline-primary rounded w-100" onclick="predict()">
+                                                <i class="uil uil-bolt-alt mr-2"></i>Get Prediction</a>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success -->
+{#    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Success">Launch Success Modal</button>#}
+    <div class="modal fade" id="Success" tabindex="-1" role="dialog" aria-labelledby="SuccessTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="SuccessTitle">Success</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img src="{% static 'img/Success.jpg' %}" width=100% alt="jawwou behi">
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Default -->
+{#    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Default">Launch Success Modal</button>#}
+    <div class="modal fade" id="Default" tabindex="-1" role="dialog" aria-labelledby="DefaultTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="DefaultTitle">Default</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img src="{% static 'img/fail.jpg' %}" width=100%  alt="9alleb :D">
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function predict(){
+            let data = [];
+            let data_is_complete = 1;
+            for (let i = 1; i < 24; i++) {
+
+                if (i === 2) {
+                    element_value = $('#X2').children('.select').attr('data-value');
+                }
+                else if (i === 3) {
+                    element_value = document.getElementById(element_id).value;
+                }
+                else if (i === 4) {
+                    element_value = $('#X3').children('.select').attr('data-value');
+                }
+                else if (i === 5 ) {
+                    element_value = $('#X4').children('.select').attr('data-value');
+                }
+                else if (i === 17 ) {
+                    element_value = 0;
+                }
+                else {
+                    element_id = "X"+i.toString()
+                    element_value = document.getElementById(element_id).value;
+                }
+
+                if ((element_value === "none" || element_value === "") && (i !== 17)) {
+                    alert("Please Complete Filling all The Required Data");
+                    data_is_complete = 0;
+                    break
+                }
+
+                data.push(element_value)
+            }
+
+            console.log(data)
+            if (data_is_complete === 1) {
+                $.ajax({
+                url: '/prediction?' + 'X1=' + data[0] + '&X2=' + data[1] + '&X3=' + data[2] + '&X4=' + data[3] + '&X5=' + data[4] + '&X6=' + data[5] + '&X7=' + data[6] + '&X8=' + data[7] + '&X9=' + data[8] + '&X10=' + data[9] + '&X11=' + data[10] + '&X12=' + data[11] + '&X13=' + data[12] + '&X14=' + data[13] + '&X15=' + data[14] + '&X16=' + data[15] + '&X17=' + data[16] + '&X18=' + data[17] + '&X19=' + data[18] + '&X20=' + data[19] + '&X21=' + data[20] + '&X22=' + data[21] + '&X23=' + data[22],
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (result) {
+                    if (result['Result'] === true) {
+                        $('#Default').modal('show');
+                    }
+
+                    else if (result['Result'] === false) {
+                        $('#Success').modal('show');
+                    }
+                    console.log(result)
+                }
+            });
+            }
+
+        }
+    </script>
+
+    <!-- javascript -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Icons -->
+    <script src="{% static 'js/feather.min.js' %}"></script>
+    <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
+    <!-- Custom Select -->
+    <script>
+        function customSelect (){
+            let click_s = 0;
+
+            $('.dropdown-select').on('click', function () {
+                if (click_s % 2 === 0) {
+                    {#$(this).parent().children('.dropdown-list').css({"opacity": "1", "visibility": "visible", "height": "86px"});#}
+                    $(this).parent().children('.dropdown-list').css({"opacity": "1", "visibility": "visible"});
+                    $(this).children('.select-icon').css('transform', 'rotate(-180deg)');
+                    $(this).css({'border-color':'#092470','color':'#092470'});
+                    $(this).children('.mdi').css('color','#092470');
+                    $('.wrapper').removeClass('d-none');}
+                else {
+                    {#$(this).parent().children('.dropdown-list').css({"opacity": "0", "visibility": "hidden", "height": "0px"});#}
+                    $(this).parent().children('.dropdown-list').css({"opacity": "0", "visibility": "hidden"});
+                    $(this).children('.select-icon').css('transform', 'rotate(0deg)');
+                    $(this).css({'border-color':'#dee2e6','color':'#3c4858'});
+                    $(this).children('.mdi').css('color','#3c4858');
+                    $('.wrapper').addClass('d-none');
+                }
+                $('.dropdown').toggleClass("zi-5");
+                click_s++;
+            });
+
+            $('.wrapper').on('click', function () {
+                $('.dropdown-list').css({"opacity": "0", "visibility": "hidden"});
+                $('.select-icon').css('transform', 'rotate(0deg)');
+                $('.dropdown-select').css({'border-color':'#dee2e6','color':'#3c4858'});
+                $('.dropdown-select').children('.mdi').css('color','#3c4858');
+                $('.wrapper').addClass('d-none');
+                $('.dropdown').removeClass("zi-5");
+                click_s++;
+            });
+
+            $('.dropwn-list__item').on('click', function () {
+                {#$('.dropdown-list').css({"opacity": "0", "visibility": "hidden", "height": "0px"});#}
+                $('.dropdown-list').css({"opacity": "0", "visibility": "hidden"});
+                $('.select-icon').css('transform', 'rotate(0deg)');
+                $('.dropdown-select').css({'border-color':'#dee2e6','color':'#3c4858'});
+                $('.dropdown-select').children('.mdi').css('color','#3c4858');
+                $(this).children('.mdi').css('color','#3c4858 !important');
+                $('.wrapper').addClass('d-none');
+                $('.dropdown').toggleClass("zi-5");
+                click_s++;
+
+                var className1 = $(this).children('i').attr('class');
+                $(this).closest('.dropdown').children('.dropdown-select').html(
+                    "<i class='" + className1 + "'></i> <span class='select'" +
+                    " data-value  = "+  $(this).children('span').attr('data-value') +
+                    " data-output = "+  $(this).children('span').attr('data-output') +">" +
+                    $(this).text() +
+                    "</span> <i class='mdi mdi-24px mdi-chevron-up select-icon'></i>"
+                );
+            });
+        }
+        customSelect ()
+    </script>
+</body>
+</html>
